@@ -50,7 +50,7 @@ $bread = 0;
 
 $fd = fsockopen( $clamhost, $clamport, $errno, $errstr );
 if (!$fd) {
-    echo "{ error: true, reason: \"$errstr\"}\n";
+    echo "{ \"error\": true, \"reason\": \"$errstr\"}\n";
     return;
 }
 
@@ -65,7 +65,7 @@ while( true ) {
     $sz = strlen($buffer);
     if( !$buffer ) {
         if( !feof($iss)) {
-            echo "{ error: true, reason: \"reading data failed\"}\n";
+            echo "{ \"error\": true, \"reason\": \"reading data failed\"}\n";
             return;
         }
         // fread() failed and we are at eof()
@@ -73,7 +73,7 @@ while( true ) {
     }
     $bread += $sz;
     if( false === fwrite($fd, int_to_network_byte_order($sz))) {
-        echo "{ error: true, reason: \"file might be too big, write cut off\"}\n";
+        echo "{ \"error\": true, \"reason\": \"file might be too big, write cut off\"}\n";
         return;
     }
     $rc=fwrite($fd, $buffer);
@@ -98,7 +98,7 @@ if( $reply == "stream: OK\0" ) {
     $emsg = trim($reply);
 }
 
-echo "{ error: ".bout($error).", passes: ".bout($passes).", reason: \"$emsg\"}\n";
+echo "{ \"error\": ".bout($error).", \"passes\": ".bout($passes).", \"reason\": \"$emsg\"}\n";
 
 
 
